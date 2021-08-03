@@ -1,0 +1,38 @@
+:root {
+  --primary-font: serif;
+
+  --primary-color: #00f;
+
+  --dark-background-color: #000;
+  --light-background-color: #ffffff;
+
+  --text-color: #000;
+  --second-text-color: #000;
+  --light-text-color: #fff;
+
+  --hover-color: #444;
+
+  --success-color: #0f0;
+  --disabled-element-color: #eee;
+  --alert-color: #f00;
+  --muted-color: #ccc;
+}
+
+html {
+  background-color: var(--light-background-color);
+  font-family: var(--primary-font);
+  color: var(--text-color);
+  font-size: 16px;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+}
