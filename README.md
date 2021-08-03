@@ -1,3 +1,3 @@
 # Basic web project template
 
-My start template for web projects.
+Simply run npm i to get started!
