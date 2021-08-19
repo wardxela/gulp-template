@@ -1,8 +1,7 @@
 @use '../abstracts' as *;
 
 .container {
-  max-width: $min-xl + 40 + px;
-  padding: 0 20px;
+  max-width: $min-xl + px;
   margin: 0 auto;
   @media (max-width: $max-lg + 40 + px) {
     max-width: 960px;
@@ -12,5 +11,9 @@
   }
   @media (max-width: $max-sm + px) {
     max-width: 540px;
+  }
+  @media (max-width: $max-xs + px) {
+    max-width: none;
+    padding: 0 20px;
   }
 }

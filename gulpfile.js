@@ -32,8 +32,11 @@ const fs = require("fs"); // works with files
 
 // dev tools
 const notify = require("gulp-notify"); // notifies when an error occured
+const sourcemaps = require('gulp-sourcemaps'); // Shows sources
 
 const bs = require("browser-sync").create(); // creates a server
+
+// HTML
 
 function html() {
   return src(["src/*.html", "src/pages/**/*.html"])
@@ -46,7 +49,9 @@ function html() {
     .pipe(bs.stream());
 }
 
-function css() {
+// CSS
+
+function prodCSS() {
   return src("src/scss/styles.scss")
     .pipe(
       sass({
@@ -71,10 +76,23 @@ function css() {
       })
     )
     .pipe(dest("build/css/"))
+}
+
+function devCSS() {
+  return src("src/scss/styles.scss")
+  .pipe(sourcemaps.init())
+    .pipe(
+      sass({
+        outputStyle: "expanded",
+      }).on("error", notify.onError())
+    )
+    .pipe(sourcemaps.write())
+    .pipe(dest("build/css/"))
     .pipe(bs.stream());
 }
 
-function js() {
+// JavaScript
+function prodJS() {
   return src("src/js/**/*.js")
     .pipe(dest("build/js"))
     .pipe(uglify())
@@ -84,6 +102,11 @@ function js() {
         suffix: ".min",
       })
     )
+    .pipe(dest("build/js"))
+}
+
+function devJS() {
+  return src("src/js/**/*.js")
     .pipe(dest("build/js"))
     .pipe(bs.stream());
 }
@@ -222,10 +245,11 @@ function watchChanges() {
     },
     port: 3000,
     notify: false,
+    ghostMode: false,
   });
   watch(["src/*.html", "src/components/**/*.html"], html);
-  watch("src/scss/**/*.scss", css);
-  watch("src/js/**/*.js", js);
+  watch("src/scss/**/*.scss", devCSS);
+  watch("src/js/**/*.js", devJS);
   watch("src/img/**/*.+(jpg|jpeg|png|svg|gif|ico|webp)", img);
   watch("src/resources/*", resources);
   watch(["src/icons/colorful/*.svg", "src/icons/monochrome/*.svg"], icons);
@@ -240,11 +264,11 @@ exports.ttf = otf2ttf;
 
 exports.build = series(
   clean,
-  parallel(html, css, js, icons, img, resources, fonts)
+  parallel(html, prodCSS, prodJS, icons, img, resources, fonts)
 );
 
 exports.default = exports.watch = series(
   clean,
-  parallel(html, css, js, icons, img, resources, fonts),
+  parallel(html, devCSS, devJS, icons, img, resources, fonts),
   watchChanges
 );
